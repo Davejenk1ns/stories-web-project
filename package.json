@@ -1,0 +1,17 @@
+{
+  "name": "web-project",
+  "version": "1.0.0",
+  "description": "A simple web project",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "dev": "python3 -m http.server 8000"
+  },
+  "keywords": [
+    "web",
+    "html",
+    "css"
+  ],
+  "author": "",
+  "license": "ISC"
+}
