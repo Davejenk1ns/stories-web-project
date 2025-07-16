@@ -4,112 +4,618 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dave Jenkins Stories</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
+        :root {
+            --primary-color: #4db6ac;
+            --secondary-color: #80cbc4;
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --text-light: #f5f5f5;
+            --text-muted: #b0b0b0;
+            --spacing: clamp(1rem, 5vw, 3rem);
+        }
+
+        * {
             margin: 0;
-            padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #f5f5f5;
-        }
-        header {
-            text-align: center;
-            padding: 20px 0;
-            border-bottom: 2px solid #006666;
-            margin-bottom: 30px;
-        }
-        h1 {
-            color: #006666;
-            margin: 0;
-        }
-        .description {
-            font-style: italic;
-            color: #666;
-            margin-top: 10px;
-        }
-        .stories-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .story-list {
-            list-style-type: none;
             padding: 0;
+            box-sizing: border-box;
         }
-        .story-item {
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.6;
         }
-        .story-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
+
+        .container {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 1rem;
         }
-        .story-link {
-            color: #006666;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1em;
-            display: block;
-            padding: 5px 0;
-            transition: color 0.2s;
-        }
-        .story-link:hover {
-            color: #004444;
-            text-decoration: underline;
-        }
-        footer {
-            margin-top: 30px;
+
+        /* Header Styles */
+        header {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            color: #666;
-            font-size: 0.9em;
+            background-color: var(--darker-bg);
+            overflow: hidden;
+        }
+
+        .header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            z-index: 0;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 0 var(--spacing);
+        }
+
+        .site-title {
+            font-size: clamp(3rem, 10vw, 5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .site-description {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: var(--primary-color);
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+
+        /* Stories Section */
+        .stories-section {
+            padding: var(--spacing) 0;
+            background-color: var(--dark-bg);
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+
+        .stories-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 2rem;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) var(--dark-bg);
+        }
+
+        .stories-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .stories-container::-webkit-scrollbar-track {
+            background: var(--darker-bg);
+            border-radius: 10px;
+        }
+
+        .stories-container::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 10px;
+        }
+
+        .story-card {
+            flex: 0 0 auto;
+            width: 350px;
+            background-color: var(--darker-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            scroll-snap-align: start;
+        }
+
+        .story-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .story-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .story-content {
+            padding: 1.5rem;
+        }
+
+        .story-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .story-excerpt {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .read-more {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background-color: var(--primary-color);
+            color: var(--darker-bg);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .read-more:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Photos Section */
+        .photos-section {
+            padding: var(--spacing) 0;
+            background-color: var(--darker-bg);
+        }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .photo-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            aspect-ratio: 1 / 1;
+            cursor: pointer;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .photo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .photo-item:hover .photo-overlay {
+            opacity: 1;
+        }
+
+        .photo-title {
+            color: var(--text-light);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: var(--spacing) 0;
+            background-color: var(--darker-bg);
+            text-align: center;
+            border-top: 1px solid #333;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+
+        /* Navigation Styles */
+        .main-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--darker-bg);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .nav-logo {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-logo:hover {
+            color: var(--secondary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 1rem 0;
+            }
+
+            .nav-links {
+                margin-top: 1rem;
+            }
+
+            .nav-links li {
+                margin-left: 1rem;
+                margin-right: 1rem;
+            }
+
+            .stories-container {
+                gap: 1rem;
+            }
+            
+            .story-card {
+                width: 280px;
+            }
+            
+            .photos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-links li {
+                margin: 0.5rem 0;
+            }
+
+            .story-card {
+                width: 100%;
+            }
+            
+            .photos-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-container">
+                <a href="index.html" class="nav-logo">Dave Jenkins Stories</a>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="#stories">Stories</a></li>
+                    <li><a href="#photos">Photos</a></li>
+                    <li><a href="stories_cms/">Archive</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <header>
-        <h1>Dave Jenkins Stories</h1>
-        <p class="description">A collection of stories from the archived website davejenkins.com (circa 2000)</p>
+        <img src="img/461966530_18459844876005984_746353050687377979_n_10162470004239874.jpg" alt="Header Background" class="header-bg">
+        <div class="header-content">
+            <h1 class="site-title">Dave Jenkins Stories</h1>
+            <p class="site-description">A collection of captivating stories from the archived website davejenkins.com (circa 2000)</p>
+        </div>
+        <a href="#stories" class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </a>
     </header>
-    
-    <div class="stories-container">
-        <ul class="story-list">
-            <li class="story-item">
-                <a href="stories/jack-the-railroad-and-shiva-the-destroyer.html" class="story-link">Jack, The Railroad, and Shiva The Destroyer</a>
-            </li>
-            <li class="story-item">
-                <a href="stories/kj-heisenberg-and-the-third-category.html" class="story-link">KJ Heisenberg and The Third Category</a>
-            </li>
-            <li class="story-item">
-                <a href="stories/jacks-tour-abroad.html" class="story-link">Jack's Tour Abroad</a>
-            </li>
-            <li class="story-item">
-                <a href="stories/airefrance-1267.html" class="story-link">Airefrance #1267</a>
-            </li>
-            <li class="story-item">
-                <a href="stories/lie-detector.html" class="story-link">Lie Detector</a>
-            </li>
-            <li class="story-item">
-                <a href="stories/village-inn.html" class="story-link">Village Inn</a>
-            </li>
-            <li class="story-item">
-                <a href="stories/lois.html" class="story-link">Lois</a>
-            </li>
-            <li class="story-item">
-                <a href="stories/yamanote.html" class="story-link">Yamanote</a>
-            </li>
-            <li class="story-item">
-                <a href="stories/silent-observer.html" class="story-link">Silent Observer</a>
-            </li>
-        </ul>
-    </div>
-    
+
+    <section id="stories" class="stories-section">
+        <div class="container">
+            <h2 class="section-title">Featured Stories</h2>
+            <div class="stories-container">
+                <div class="story-card">
+                    <img src="img/461966530_18459844876005984_746353050687377979_n_10162470004239874.jpg" alt="Story Image" class="story-image">
+                    <div class="story-content">
+                        <h3 class="story-title">Jack, The Railroad, and Shiva The Destroyer</h3>
+                        <p class="story-excerpt">Just before little Jack finished his matchbox lodge, he stopped and looked through the town underneath him. The general store, the dry goods depot, the mill, the hotel, and the post office splayed in apple-pie order-- all was as it had been from the beginning; all was as it had been in the Great Book.</p>
+                        <a href="stories/jack-the-railroad-and-shiva-the-destroyer.html" class="read-more">Read Story</a>
+                    </div>
+                </div>
+                
+                <div class="story-card">
+                    <img src="img/461852849_18459844903005984_1840610046118243510_n_10162470004219874.jpg" alt="Story Image" class="story-image">
+                    <div class="story-content">
+                        <h3 class="story-title">KJ Heisenberg and The Third Category</h3>
+                        <p class="story-excerpt">"Excuse me, Ma'am . . . ", Kathy softly knocked on the door of the Director's office as she opened it. "I know you wanted the Africa assignment finished by 5:00PM, but I have a question on this one file . . ." The director looked up from reading the reports on her desk to peer over the rim of her half glasses.</p>
+                        <a href="stories/kj-heisenberg-and-the-third-category.html" class="read-more">Read Story</a>
+                    </div>
+                </div>
+                
+                <div class="story-card">
+                    <img src="img/462008161_18459844888005984_5876251891228555682_n_10162470004194874.jpg" alt="Story Image" class="story-image">
+                    <div class="story-content">
+                        <h3 class="story-title">Jack's Tour Abroad</h3>
+                        <p class="story-excerpt">"Hakim . . . There's another one . . . next to the sandbar." Jack raised his left arm and languidly extended his index finger, pointing out another body that had somehow missed their last sweep of 'the pond'. It wasn't really a pond-it was just a wide bend where the river flattened out and the current slowed to form sand bars, islets, and a small marsh on the inside of the angle.</p>
+                        <a href="stories/jacks-tour-abroad.html" class="read-more">Read Story</a>
+                    </div>
+                </div>
+                
+                <div class="story-card">
+                    <img src="img/462123851_18459844906005984_590005827938812046_n_10162470004169874.jpg" alt="Story Image" class="story-image">
+                    <div class="story-content">
+                        <h3 class="story-title">Airefrance #1267</h3>
+                        <p class="story-excerpt">A captivating tale of adventure and mystery that will keep you on the edge of your seat.</p>
+                        <a href="stories/airefrance-1267.html" class="read-more">Read Story</a>
+                    </div>
+                </div>
+                
+                <div class="story-card">
+                    <img src="img/454408655_18448729906005984_7472847676074782795_n_10162254175509874.jpg" alt="Story Image" class="story-image">
+                    <div class="story-content">
+                        <h3 class="story-title">Lie Detector</h3>
+                        <p class="story-excerpt">Truth and deception intertwine in this gripping narrative about human nature.</p>
+                        <a href="stories/lie-detector.html" class="read-more">Read Story</a>
+                    </div>
+                </div>
+                
+                <div class="story-card">
+                    <img src="img/454487085_18448664698005984_7619963754652701362_n_10162252904059874.jpg" alt="Story Image" class="story-image">
+                    <div class="story-content">
+                        <h3 class="story-title">Village Inn</h3>
+                        <p class="story-excerpt">A quaint setting becomes the backdrop for an unexpected series of events.</p>
+                        <a href="stories/village-inn.html" class="read-more">Read Story</a>
+                    </div>
+                </div>
+                
+                <div class="story-card">
+                    <img src="img/454398411_18448664677005984_4903468221213918528_n_10162252904064874.jpg" alt="Story Image" class="story-image">
+                    <div class="story-content">
+                        <h3 class="story-title">Lois</h3>
+                        <p class="story-excerpt">An intimate portrait of a character whose life takes unexpected turns.</p>
+                        <a href="stories/lois.html" class="read-more">Read Story</a>
+                    </div>
+                </div>
+                
+                <div class="story-card">
+                    <img src="img/454404441_18448664686005984_8860905676930565312_n_10162252904054874.jpg" alt="Story Image" class="story-image">
+                    <div class="story-content">
+                        <h3 class="story-title">Yamanote</h3>
+                        <p class="story-excerpt">A journey through cultural landscapes and personal discovery.</p>
+                        <a href="stories/yamanote.html" class="read-more">Read Story</a>
+                    </div>
+                </div>
+                
+                <div class="story-card">
+                    <img src="img/454558695_18448729897005984_4517803920585449846_n_10162254175504874.jpg" alt="Story Image" class="story-image">
+                    <div class="story-content">
+                        <h3 class="story-title">Silent Observer</h3>
+                        <p class="story-excerpt">Witnessing events unfold from the shadows, this narrative explores the power of observation.</p>
+                        <a href="stories/silent-observer.html" class="read-more">Read Story</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="photos-section">
+        <div class="container">
+            <h2 class="section-title">Featured Photos</h2>
+            <div class="photos-grid">
+                <div class="photo-item">
+                    <img src="img/461966530_18459844876005984_746353050687377979_n_10162470004239874.jpg" alt="Featured Photo">
+                    <div class="photo-overlay">
+                        <h3 class="photo-title">Scenic Landscape</h3>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="img/461852849_18459844903005984_1840610046118243510_n_10162470004219874.jpg" alt="Featured Photo">
+                    <div class="photo-overlay">
+                        <h3 class="photo-title">Urban Architecture</h3>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="img/462008161_18459844888005984_5876251891228555682_n_10162470004194874.jpg" alt="Featured Photo">
+                    <div class="photo-overlay">
+                        <h3 class="photo-title">Natural Wonder</h3>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="img/462123851_18459844906005984_590005827938812046_n_10162470004169874.jpg" alt="Featured Photo">
+                    <div class="photo-overlay">
+                        <h3 class="photo-title">Cultural Heritage</h3>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="img/454408655_18448729906005984_7472847676074782795_n_10162254175509874.jpg" alt="Featured Photo">
+                    <div class="photo-overlay">
+                        <h3 class="photo-title">Street Scene</h3>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="img/454487085_18448664698005984_7619963754652701362_n_10162252904059874.jpg" alt="Featured Photo">
+                    <div class="photo-overlay">
+                        <h3 class="photo-title">Abstract Pattern</h3>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="img/454398411_18448664677005984_4903468221213918528_n_10162252904064874.jpg" alt="Featured Photo">
+                    <div class="photo-overlay">
+                        <h3 class="photo-title">Historical Moment</h3>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="img/454404441_18448664686005984_8860905676930565312_n_10162252904054874.jpg" alt="Featured Photo">
+                    <div class="photo-overlay">
+                        <h3 class="photo-title">Portrait Study</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <footer>
-        <p>These stories were imported from the Internet Archive's Wayback Machine snapshot of davejenkins.com from January 16, 2000.</p>
+        <div class="container">
+            <p class="footer-text">These stories were imported from the Internet Archive's Wayback Machine snapshot of davejenkins.com from January 16, 2000.</p>
+        </div>
     </footer>
+
+    <script src="scripts.js"></script>
+    <script>
+        // Smooth scrolling for the scroll indicator
+        document.querySelector('.scroll-indicator').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector('#stories').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+
+        // Add animation to elements when they come into view
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Apply initial styles and observe elements
+        document.querySelectorAll('.section-title, .story-card, .photo-item').forEach(el => {
+            el.style.opacity = 0;
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
 </body>
 </html>

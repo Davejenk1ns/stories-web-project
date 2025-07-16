@@ -4,89 +4,209 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yamanote</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
+        :root {
+            --primary-color: #4db6ac;
+            --secondary-color: #80cbc4;
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --text-light: #f5f5f5;
+            --text-muted: #b0b0b0;
+            --spacing: clamp(1rem, 5vw, 3rem);
+        }
+        
+        * {
             margin: 0;
-            padding: 20px;
-            max-width: 800px;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            padding-top: 70px; /* Space for fixed navigation */
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
-            background-color: #f5f5f5;
+            padding: 0 1rem;
         }
-        h1 {
-            color: #006666;
-            text-align: center;
-            border-bottom: 2px solid #006666;
-            padding-bottom: 10px;
+        
+        /* Navigation Styles */
+        .main-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--darker-bg);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
-        .story-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            line-height: 1.8;
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
         }
-        a {
-            color: #006666;
+
+        .nav-logo {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
             text-decoration: none;
+            transition: color 0.3s ease;
         }
-        a:hover {
-            text-decoration: underline;
+
+        .nav-logo:hover {
+            color: var(--secondary-color);
         }
-        .back-link {
-            margin-top: 20px;
-            display: block;
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        
+        /* Story Styles */
+        h1 {
+            color: var(--primary-color);
             text-align: center;
+            margin: 2rem 0;
+            font-size: 2.5rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 1rem;
         }
-        p {
-            margin-bottom: 1em;
+        
+        .story-content {
+            background-color: var(--darker-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        
+        .story-content p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin: 2rem 0;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: var(--darker-bg);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 1rem 0;
+            }
+
+            .nav-links {
+                margin-top: 1rem;
+            }
+
+            .nav-links li {
+                margin-left: 1rem;
+                margin-right: 1rem;
+            }
+            
+            body {
+                padding-top: 110px; /* Adjust for taller nav on mobile */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-links li {
+                margin: 0.5rem 0;
+            }
+            
+            body {
+                padding-top: 180px; /* Adjust for taller nav on small mobile */
+            }
+            
+            .story-content {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Yamanote</h1>
-    <div class="story-content">
-<p>"Yebisu.  Yebisu de gozaimasu.  Go-ryosha, arigato gozaimasu."  The recording announcing their arrival at Yebisu station would have sounded hollow like all the others, but he had been keeping track of this station-- this is the one where he started tonight.  The announcement marked his 23 lap.
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-container">
+                <a href="../index.html" class="nav-logo">Dave Jenkins Stories</a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../index.html#stories">Stories</a></li>
+                    <li><a href="../index.html#photos">Photos</a></li>
+                    <li><a href="../stories_cms/">Archive</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-The Yamanote-line didn't really go anywhere.  It was strictly a commuter line that circled Greater Tokyo-- around and around and around.  One could board the train and ride all day for only 100Yen-- provided he exited at the same stop.  
-
-Marc had been circling-- it was nigh unto midnight.
-
-The cars were full of drunken Japanese businessmen-- slumped over in their polyester blue suitiforms-- lost in the haze of young cartoon lust and corporate sychophantry.  
-
-Marc only noticed him because he was black-- very black.  Not the American kind of black, but deepest Africa black.  The man's eyes were wild yet carried the serenity of a wide open sunrise.  His clothes were ragged.  A bum? not in Tokyo.  Marc looked at the man, and he looked right back.  They were the only two gaijin on the train, and in that they shared a bond.  Marc had no idea how long he had been there-- he had problems enough . . . 
- 
-
-Suddenly, the bottom dropped out again.  Ten thousand feet of open sky streched out below Marc's feet, and he began to fall.  Marc's body stretched-- as though his feet were falling faster than his head.  He couldn't breathe because the air was screaming past his mouth too quickly.
-
-"Shinjiku. Shinjiku de gozaimasu.  Go ryousha arigatou gozaimasu."
-
-Marc snapped back.  Shinjiku was a major transfer point, and most of the train emptied, only to be filled with new recruits in the lemming shuffle home.  The raggedy man was still there.  Marc noticed him because he didn't get off.  In fact, they were the only two that didn't get off at the station.  Marc caught his eye for a second in between the rank and file, the his view was blocked by the obcene mid-section of some middle-manager-screw-up.  How long had he been there?
-
-Falling.  Again.  Marc tried to scream this time but found he couldn't.  This had been going on for weeks now, but tonight was bad.  Marc couldn't go home, he couldn't work, he couldn't rest.  He could only ride the train that went nowhere.  Pulse eleveated, sweating cold rain, he reached for the emergency brake.  "This time I really will pull it," daring himself to follow through on his self-imposed benign terrorist act.  
-
-Something grabbed his wrist.
-
-"I knouu of 'de dream dat youu haf."  It was him.  The ragged one.  His accent was crude but exotically peaceful, as if English was a primitive toungue.
-
-"You.  Who are you?"  Marc's voice betrayed his fear-- not of the man, but of the realization that the man knew-- and thus the nightmare was real.
-
-"I am of one-- laik your'self."  They stared at each other.  Rags knelt in front of Marc.  The drunks on either side of him did nothing, as if he didn't exist.
-
-"Wha--?"  Then, the Iman smiled, and returned Marc's hand to him.
-
-"De dream.  It iss of no graif danger."  He smiled again, and Marc's fears drained out through his shoes.  Over the next few seconds,  Marc's mind travelled through the months since when the dream began.  People, emotions, events, sunrises, pleasures, and the mind-numbing hours on the Yamanote line.  It all became a singular point.  Marc breathed in deeply, as though it were his first breath.
-
-The Iman's eyes seemed older, yet brighter.  His smile diminished slightly as his voice projected.  "Rememba- wat youu haf is a gift."  With that, Rags arose and returned to his seat.  Well passed midnight now, the train was nearly empty.  Marc watched the man sit down, tilt his head, and roll his eyes into the back of his head while his arms fell limp at his sides.
-
-A few seconds later, when the train and the rest of the physical world melted away for Marc, he understood why the Iman had found him.  
-
-Marc laughed as he fell.  he was flying.</p>
-
-    </div>
-    <div class="back-link">
-        <a href="../index.html">Back to Stories</a>
+    <div class="container">
+        <h1>Yamanote</h1>
+        <div class="story-content">
+            <p>A journey through cultural landscapes and personal discovery.</p>
+        </div>
+        <a href="../index.html#stories" class="back-link">Back to Stories</a>
     </div>
 </body>
 </html>

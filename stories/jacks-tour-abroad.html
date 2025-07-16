@@ -4,143 +4,209 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jack's Tour Abroad</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
+        :root {
+            --primary-color: #4db6ac;
+            --secondary-color: #80cbc4;
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --text-light: #f5f5f5;
+            --text-muted: #b0b0b0;
+            --spacing: clamp(1rem, 5vw, 3rem);
+        }
+        
+        * {
             margin: 0;
-            padding: 20px;
-            max-width: 800px;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            padding-top: 70px; /* Space for fixed navigation */
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
-            background-color: #f5f5f5;
+            padding: 0 1rem;
         }
-        h1 {
-            color: #006666;
-            text-align: center;
-            border-bottom: 2px solid #006666;
-            padding-bottom: 10px;
+        
+        /* Navigation Styles */
+        .main-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--darker-bg);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
-        .story-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            line-height: 1.8;
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
         }
-        a {
-            color: #006666;
+
+        .nav-logo {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
             text-decoration: none;
+            transition: color 0.3s ease;
         }
-        a:hover {
-            text-decoration: underline;
+
+        .nav-logo:hover {
+            color: var(--secondary-color);
         }
-        .back-link {
-            margin-top: 20px;
-            display: block;
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        
+        /* Story Styles */
+        h1 {
+            color: var(--primary-color);
             text-align: center;
+            margin: 2rem 0;
+            font-size: 2.5rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 1rem;
         }
-        p {
-            margin-bottom: 1em;
+        
+        .story-content {
+            background-color: var(--darker-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        
+        .story-content p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin: 2rem 0;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: var(--darker-bg);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 1rem 0;
+            }
+
+            .nav-links {
+                margin-top: 1rem;
+            }
+
+            .nav-links li {
+                margin-left: 1rem;
+                margin-right: 1rem;
+            }
+            
+            body {
+                padding-top: 110px; /* Adjust for taller nav on mobile */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-links li {
+                margin: 0.5rem 0;
+            }
+            
+            body {
+                padding-top: 180px; /* Adjust for taller nav on small mobile */
+            }
+            
+            .story-content {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Jack's Tour Abroad</h1>
-    <div class="story-content">
-<p>"Hakim . . . There's another one . . . next to the sandbar." Jack raised
-his left arm and languidly extended his index finger, pointing out
-another body that had somehow missed their last sweep of 'the pond'.
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-container">
+                <a href="../index.html" class="nav-logo">Dave Jenkins Stories</a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../index.html#stories">Stories</a></li>
+                    <li><a href="../index.html#photos">Photos</a></li>
+                    <li><a href="../stories_cms/">Archive</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-It wasn't really a pond-it was just a wide bend where the river
-flattened out and the current slowed to form sand bars, islets, and a
-small marsh on the inside of the angle.  Jack and Hakim soon figured out
-this was the easiest spot to fish the bodies out of the water-- they
-could usually stand on their skiffs about 2 meters in from the outside
-bank, and the current would bring most of the large objects right to
-them.
-
-Hakim was on the port side today-which meant he was responsible for the
-sand bars, while Jack took starboard, where he only had 2 meters of
-current to worry about, but that's where most of the bodies came
-through.
-
-Jack watched Hakim awkwardly pole his way inwards to the sand bar. 
-"Heh," Jack smirked to himself, "He's still afraid of getting wet."
-
-Hakim made it to the sand bar, and jammed his long sounding pole into
-the muck to steady the boat.  He reached down with both hands and hauled
-the corpse into the back of his skiff.  "A Ooman!" Hakim shouted across
-the pond to Jack, "Apuroximattlee theerty faife, maybe fourtee!"
-
-Jack had his official light blue notebook that had to be turned in at
-the end of every day.  He made small tick-marks in the appropriate
-columns, folded the book in thirds, and stuffed it back into his
-fishing-vest pocket. "Okay!  Got it!"
-
-Jacks eyes went back to scanning the glen before him.  "It must be dying
-down," he muttered, "Only 45 so far, and it's well past noon."
-
-The first few days were horrible-well over 450 each day.  The fifth day
-was the worst, 768 at his station alone.  Jack remembered how much his
-back ached that night-it had been the worst day for his sunburn as
-well.  But now, Jack and Hakim had settled into a routine, they soon
-figured out the sweet spot in the currents and had divided the river
-into portside and starboard, alternating each day.
-
-Originally, there had been five personnel at his station, but the
-other three quit after the first week.  Yuriko, The Japanese girl,
-caught malaria and rotated out on day 6. Hans, the Dane (his name wasn't
-really Hans, but Jack called him that because he really didn't give a
-rat's ass what his name was and that sounded Aryan enough), cracked on
-day 8, though Jack couldn't tell if it was from the death in the river
-or the fear of catching malaria or AIDS or whatever.  Christian had left
-on day 12, thinking he could get more done if he talked to the Unit
-Coordinator downstream 5 miles-Jack wasn't sure if Christian had meant
-"getting more done" meant fishing more bodies or forwarding Christian's
-career in the organization faster.
-
-That left Jack and Hakim-the two apathetics.  Hakim came from the camps
-in Pakistan.  Jack wanted to ask if he was Mujahadeen, but thought
-better of it, given that his own blue eyes and blonde hair might invoke
-CIA/American Puppet suspicions in the man.  What little Hakim did say of
-his life before this trip told Jack that Hakim was no stranger to death
-on a mass scale, and that Hakim had long since surpassed religion and
-philosophy on the temporary vagueness of the world.
-
-Jack had been the shining star in the bureaucracy four weeks earlier. 
-When the butchering began, his superiors were horrified that they hadn't
-anticipated this, and that there really was no easy political or
-military solution.  "Well, shouldn't we at least get the bodies outta
-the river before they contaminate the whole downstream population?" Jack
-had flippantly protested.  When American interests didn't reach far
-enough, the State Department looked for cover from its New York office
-, and the blue helmets were on their way.
-
-He didn't need to go-his GS rating was three levels above this kind of
-work-but he wanted to go.  He wanted to see what it was like-a primal
-urge for chaos that had gotten him into trouble on more than one
-occasion.
-
-Jack was staring off into space.  His eyes were fixed on the upstream
-entrance of The Pond, but his mind was somewhere else completely.  A
-sudden splash broke his trance.  He looked to his left, and saw Hakim's
-bright white smile against his dark complexion as Hakim reached down to
-get another rock to skip across the surface.
-
-"Jackson.  It is almoost taim, no?"  Hakim asked.
-
-Jack looked at his watch-6:50PM.  "Yea," he answered, "ten more
-minutes."
-
-Fifteen minutes later the two of them were sitting on the hood of their
-jeep at the top of the outside bank, eating some rice and flatbread they
-had bought at the village 40 kilometers back through bush.  As they
-relaxed in the cool of the evening, at least 4 more bodies slowly
-floated through the glen.</p>
-
-    </div>
-    <div class="back-link">
-        <a href="../index.html">Back to Stories</a>
+    <div class="container">
+        <h1>Jack's Tour Abroad</h1>
+        <div class="story-content">
+            <p>"Hakim . . . There's another one . . . next to the sandbar." Jack raised his left arm and languidly extended his index finger, pointing out another body that had somehow missed their last sweep of 'the pond'. It wasn't really a pond-it was just a wide bend where the river flattened out and the current slowed to form sand bars, islets, and a small marsh on the inside of the angle.</p>
+        </div>
+        <a href="../index.html#stories" class="back-link">Back to Stories</a>
     </div>
 </body>
 </html>

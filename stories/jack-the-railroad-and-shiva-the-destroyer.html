@@ -4,93 +4,248 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jack, The Railroad, and Shiva The Destroyer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
+        :root {
+            --primary-color: #4db6ac;
+            --secondary-color: #80cbc4;
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --text-light: #f5f5f5;
+            --text-muted: #b0b0b0;
+            --spacing: clamp(1rem, 5vw, 3rem);
+        }
+        
+        * {
             margin: 0;
-            padding: 20px;
-            max-width: 800px;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            padding-top: 70px; /* Space for fixed navigation */
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
-            background-color: #f5f5f5;
+            padding: 0 1rem;
         }
-        h1 {
-            color: #006666;
-            text-align: center;
-            border-bottom: 2px solid #006666;
-            padding-bottom: 10px;
+        
+        /* Navigation Styles */
+        .main-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--darker-bg);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
-        .story-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            line-height: 1.8;
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
         }
-        a {
-            color: #006666;
+
+        .nav-logo {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
             text-decoration: none;
+            transition: color 0.3s ease;
         }
-        a:hover {
-            text-decoration: underline;
+
+        .nav-logo:hover {
+            color: var(--secondary-color);
         }
-        .back-link {
-            margin-top: 20px;
-            display: block;
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        
+        /* Story Styles */
+        h1 {
+            color: var(--primary-color);
             text-align: center;
+            margin: 2rem 0;
+            font-size: 2.5rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 1rem;
         }
-        p {
-            margin-bottom: 1em;
+        
+        .story-content {
+            background-color: var(--darker-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        
+        .story-content p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin: 2rem 0;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: var(--darker-bg);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 1rem 0;
+            }
+
+            .nav-links {
+                margin-top: 1rem;
+            }
+
+            .nav-links li {
+                margin-left: 1rem;
+                margin-right: 1rem;
+            }
+            
+            body {
+                padding-top: 110px; /* Adjust for taller nav on mobile */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-links li {
+                margin: 0.5rem 0;
+            }
+            
+            body {
+                padding-top: 180px; /* Adjust for taller nav on small mobile */
+            }
+            
+            .story-content {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Jack, The Railroad, and Shiva The Destroyer</h1>
-    <div class="story-content">
-<p>Just before little Jack finished his matchbox lodge, he stopped and looked through the town underneath him.  The general store, the dry goods depot, the mill, the hotel, and the post office splayed in apple-pie order-- all was as it had been from the beginning; all was as it had been in the Great Book.
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-container">
+                <a href="../index.html" class="nav-logo">Dave Jenkins Stories</a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../index.html#stories">Stories</a></li>
+                    <li><a href="../index.html#photos">Photos</a></li>
+                    <li><a href="../stories_cms/">Archive</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-"Jackie," Mother called, "do you want a sandwich, honey?"
-"No, Mother," now furitively rubbing his small hands "I'm gonna make something myself."
+    <div class="container">
+        <h1>Jack, The Railroad, and Shiva The Destroyer</h1>
+        <div class="story-content">
+            <p>Just before little Jack finished his matchbox lodge, he stopped and looked through the town underneath him.  The general store, the dry goods depot, the mill, the hotel, and the post office splayed in apple-pie order-- all was as it had been from the beginning; all was as it had been in the Great Book.
 
-What was missing?  The rails were straight, the signals all wired, the plasticine population stood just so along the miniature (HO scale) boardwalks.  Jack consulted the Book:
+            "Jackie," Mother called, "do you want a sandwich, honey?"
+            "No, Mother," now furitively rubbing his small hands "I'm gonna make something myself."
 
-'Chapter 14: Running Your Railroad
-Now that your town is built, go ahead and run the railline according to the schedule (see Chapter 12).  Make sure your HO Line makes all the stops!  Deliver that lumber from Thunder Mountain to the Mill Race!  Take the ore from Golddigger's hill down to the Ironworks for smelting!  Don't forget your regular customers coming in from Capital City for the Annual Carnival . . .'
+            What was missing?  The rails were straight, the signals all wired, the plasticine population stood just so along the miniature (HO scale) boardwalks.  Jack consulted the Book:
 
-The Chapter continued with the banalities or HO life.  Jack had fulfilled all of the requirements to complete his world.  Jack had fulfilled the Law.  The physical world was complete.
+            'Chapter 14: Running Your Railroad
+            Now that your town is built, go ahead and run the railline according to the schedule (see Chapter 12).  Make sure your HO Line makes all the stops!  Deliver that lumber from Thunder Mountain to the Mill Race!  Take the ore from Golddigger's hill down to the Ironworks for smelting!  Don't forget your regular customers coming in from Capital City for the Annual Carnival . . .'
 
-Yet something still left the little genius incomplete.  Jack read further . . .
+            The Chapter continued with the banalities or HO life.  Jack had fulfilled all of the requirements to complete his world.  Jack had fulfilled the Law.  The physical world was complete.
 
-' Remember to prepare for emergencies here in HOville!  Does your city have a Fire Department?  Read our next chapter and note the new line of products (FireHouse #47900F) that will make your town complete. . .'
+            Yet something still left the little genius incomplete.  Jack read further . . .
 
-
-
-
-
-
-Fire.
+            ' Remember to prepare for emergencies here in HOville!  Does your city have a Fire Department?  Read our next chapter and note the new line of products (FireHouse #47900F) that will make your town complete. . .'
 
 
 
 
 
-Vishnu brought all of creation out of the Bramha, only to have Shiva the Destroyer take it down again.  One was not complete without the other.
 
-Jack eyed the pile of matchheads left over from the Matchstick Lodge (now sitting proudly at the end of town near Thunder Mountain).
+            Fire.
 
-"Jackie!  What on Earth have you done?!?"  Mother choked as the smoke billowed up from the basement.  "Jackie!"
 
-A short while later, and Mother and Little Jack were watching the firemen pull down with their axes the last of the walls from their former house.
 
-"Here's your trouble right here, ma'am," the charred fireman spoke evenly to the shaking cage of a woman, "Looks like Little Firebug here was playing with matches in the basement."  His eyes narrowed at the boy.
 
-For the first time in his life, Jack had no idea what was going to happen next.  So this is fear.  So this is life-- the period between Vishnu the Creator and Shiva the Destroyer.
 
-Jack had become the center on the Great Wheel.  His eyes spun in their sockets, and Jack began to giggle uncontrolably.</p>
+            Vishnu brought all of creation out of the Bramha, only to have Shiva the Destroyer take it down again.  One was not complete without the other.
 
-    </div>
-    <div class="back-link">
-        <a href="../index.html">Back to Stories</a>
+            Jack eyed the pile of matchheads left over from the Matchstick Lodge (now sitting proudly at the end of town near Thunder Mountain).
+
+            "Jackie!  What on Earth have you done?!?"  Mother choked as the smoke billowed up from the basement.  "Jackie!"
+
+            A short while later, and Mother and Little Jack were watching the firemen pull down with their axes the last of the walls from their former house.
+
+            "Here's your trouble right here, ma'am," the charred fireman spoke evenly to the shaking cage of a woman, "Looks like Little Firebug here was playing with matches in the basement."  His eyes narrowed at the boy.
+
+            For the first time in his life, Jack had no idea what was going to happen next.  So this is fear.  So this is life-- the period between Vishnu the Creator and Shiva the Destroyer.
+
+            Jack had become the center on the Great Wheel.  His eyes spun in their sockets, and Jack began to giggle uncontrolably.</p>
+        </div>
+        <a href="../index.html#stories" class="back-link">Back to Stories</a>
     </div>
 </body>
 </html>

@@ -4,166 +4,209 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KJ Heisenberg and The Third Category</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
+        :root {
+            --primary-color: #4db6ac;
+            --secondary-color: #80cbc4;
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --text-light: #f5f5f5;
+            --text-muted: #b0b0b0;
+            --spacing: clamp(1rem, 5vw, 3rem);
+        }
+        
+        * {
             margin: 0;
-            padding: 20px;
-            max-width: 800px;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            padding-top: 70px; /* Space for fixed navigation */
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
-            background-color: #f5f5f5;
+            padding: 0 1rem;
         }
-        h1 {
-            color: #006666;
-            text-align: center;
-            border-bottom: 2px solid #006666;
-            padding-bottom: 10px;
+        
+        /* Navigation Styles */
+        .main-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--darker-bg);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
-        .story-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            line-height: 1.8;
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
         }
-        a {
-            color: #006666;
+
+        .nav-logo {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
             text-decoration: none;
+            transition: color 0.3s ease;
         }
-        a:hover {
-            text-decoration: underline;
+
+        .nav-logo:hover {
+            color: var(--secondary-color);
         }
-        .back-link {
-            margin-top: 20px;
-            display: block;
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        
+        /* Story Styles */
+        h1 {
+            color: var(--primary-color);
             text-align: center;
+            margin: 2rem 0;
+            font-size: 2.5rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 1rem;
         }
-        p {
-            margin-bottom: 1em;
+        
+        .story-content {
+            background-color: var(--darker-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        
+        .story-content p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin: 2rem 0;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: var(--darker-bg);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 1rem 0;
+            }
+
+            .nav-links {
+                margin-top: 1rem;
+            }
+
+            .nav-links li {
+                margin-left: 1rem;
+                margin-right: 1rem;
+            }
+            
+            body {
+                padding-top: 110px; /* Adjust for taller nav on mobile */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-links li {
+                margin: 0.5rem 0;
+            }
+            
+            body {
+                padding-top: 180px; /* Adjust for taller nav on small mobile */
+            }
+            
+            .story-content {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>KJ Heisenberg and The Third Category</h1>
-    <div class="story-content">
-<p>"Excuse me, Ma'am . . . ", Kathy softly knocked on the door of the
-Director's office as she opened it.  "I know you wanted the Africa
-assignment finished by 5:00PM, but I have a question on this one file .
-. ."
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-container">
+                <a href="../index.html" class="nav-logo">Dave Jenkins Stories</a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../index.html#stories">Stories</a></li>
+                    <li><a href="../index.html#photos">Photos</a></li>
+                    <li><a href="../stories_cms/">Archive</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-The director looked up from reading the reports on her desk to peer over
-the rim of her half glasses.  Her blue eyes seemed only more intense now
-framed by her silver hair.  "That's quite alright.  I can't figure out
-our objective on this whole East Timor mess anyway,"  She dropped her
-highlighting pen in frustration, "What seems to be the snag?"
-
-"Well," Kathy moved forward to hand the Director the brown folder, "the
-Africa assignment needs five GS6s, and this one's a GS10.  He is way
-above this kind of overseas clean-up work, yet he is on the list.  From
-what I can see, he volunteered."
-
-"How can you tell that?"  the director cocked her head up and peeled her
-eyeballs down to begin reading the cover of the folder with her
-bifocals.
-
-"The handwriting, ma'am.  He wrote his own objectives and perogative
-assignments.  The handwriting on those paragraphs match the script on
-release forms."  Kathy extended a finger to point to the right half of
-the folder, now splayed on the Director's oak desk.
-
-The director blinked, then turned the folder to the inside back page. 
-Finding the 10 digit alphanumeric, she turned to her terminal on the
-corner of her desk and punched in the code.
-
-"Aah.   Grey,  Jackson K.  MB67-594-DJ6.  Rated as GS10 with the NSA. 
-Now on detachment with  . . . State Department-- huh.  What's he doing
-over at State?  What's he doing volunteering for that mess in Africa?" 
-The Director was mumbling, seemingly not realizing she was compromizing
-security with Kathy there in the room.  Actually, she did realize what
-she was saying, but she was close enough to retirement, and she liked
-Kathy, so she had begun to 'leak' information around Kathy to ensure
-that the young woman could replace her when she did leave.
-
-The Director took five minutes glancing between the folder and the
-terminal, as though she were piecing in the blank spots in Jackson's
-record.
-
-"Kathy," the Director now focused at the open dossier, "You should know
-this one by now.  You've sent him out on five assignments like this
-already."  The Director turned the dossier around on the desk and
-pointed to the initials in the upper right-hand corner on five separate
-pages.  "That is you, isn't it?  'KJ'?"
-
-Kathy had never rifled through the whole folder before.  She had always
-checked the top sheet for financial and department clearances and signed
-them off to their destiny.  "Yes ma'am.  That is my 'KJ'."
-
-"Well," the Director pushed the folder back across the desk to Kathy "If
-the young Mr. Grey isn't dead yet, who am I to stop him from trying? 
-Send him. --And Kathy-- I think you can start making these calls
-yourself."
-
-"Oh God," Kathy thought to herself, "was that a slam for bothering
-her?"  The warm smile developing on the Director's face told her
-otherwise.  It was no reproach, it was the Director's attempt at
-foreshadowing, telling Kathy that she'll soon have the job herself.
-
-
----------------------------
-In 1927, Werner Heisenberg enunciated 
-the principle of "Unbestimmtheit",
-which can be translated as "uncertainty".
-In general, it can be shown that, if 
-delta-X denotes the effective 
-range in the possible values that
-might be found by observation for 
-the coordinate X of a given particle,
-and if delta-P indicates the similar 
-range for momentum, then:
-
-      dXdP &gt;= h
-
-where h is Plank's constant of the 
-Universe.  In short, as soon as you
-measure something, you cannot be 
-sure of it's true position.
-
-The way (Dao) that can be spoken of
-Is not the constant way (Dao);
-The name that can be named
-Is not the constant name.
-------------------------------
-
-
-Kathy stared at Jackson's file for a long time.
-
-For months, she had been secretly tracking on a yellow pad which files
-didn't come back from which assignment.  She had also been
-cross-referencing their numbers with this fatality rate-- hoping to find
-some pattern or odd quirk.  Odd numbers?  Evens?  The ones with double
-pairs?  Sequential?  There was no pattern.  But she had never felt any
-guilt playing St. Peter with these files, because she had never known
-their names . . .  they were just files.
-
-Now she knew one.  What made it worse, this was The Anomaly Folder. 
-She had filed this one in the 'Goat' pile at least four times now, and
-he kept coming back.  Maybe that's why she went and bothered the
-Director about it-- she wanted to know why this one kept defying her
-categories.
-
-Now she had measured him.
-Now she had named him.
-
-He's not a Sheep-- we were well beyond Sheep at this point (he would
-never take a pansy assignment).  He's not a Goat-- he had come back from
-too many of those to be a Goat.
-
-Kathy stared at the folder on her desk until five minutes before 5:00PM.</p>
-
-    </div>
-    <div class="back-link">
-        <a href="../index.html">Back to Stories</a>
+    <div class="container">
+        <h1>KJ Heisenberg and The Third Category</h1>
+        <div class="story-content">
+            <p>"Excuse me, Ma'am . . . ", Kathy softly knocked on the door of the Director's office as she opened it. "I know you wanted the Africa assignment finished by 5:00PM, but I have a question on this one file . . ." The director looked up from reading the reports on her desk to peer over the rim of her half glasses.</p>
+        </div>
+        <a href="../index.html#stories" class="back-link">Back to Stories</a>
     </div>
 </body>
 </html>
